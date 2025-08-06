@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TaskInfoWidget extends StatefulWidget {
-  final int taskId;
+  final int todoTaskId;
   final String title;
   final String? description;
 
   const TaskInfoWidget({
     super.key,
-    required this.taskId,
+    required this.todoTaskId,
     required this.title,
     this.description,
   });

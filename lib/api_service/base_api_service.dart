@@ -61,6 +61,23 @@ abstract class BaseApiService {
     }
   }
 
+  Future<dynamic> patch(String path, Map<String, dynamic>? data) async {
+    try {
+      final request = await _client.patchUrl(Uri.parse('$baseUrl$path'));
+
+      if (data != null) {
+        _addJsonBody(request: request, data: data);
+      }
+
+      return await _returnJsonResponse(
+        request: request,
+        errorMessage: "DELETE $path failed",
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> _returnJsonResponse({
     required HttpClientRequest request,
     required String errorMessage,

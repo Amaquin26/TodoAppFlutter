@@ -30,10 +30,7 @@ class _HomeViewState extends State<HomeView> {
         _todoTasks = todoTasks;
         _isLoading = false;
       });
-      debugPrint("In");
-      debugPrint(todoTasks.toString());
-    } catch (e) {
-      debugPrint('Failed to load tasks: $e');
+    } finally {
       setState(() {
         _isLoading = false;
       });
@@ -54,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TaskView(taskId: task.id),
+                        builder: (context) => TaskView(todoTaskId: task.id),
                       ),
                     );
                   },

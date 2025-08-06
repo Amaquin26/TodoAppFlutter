@@ -7,9 +7,13 @@ class TodoTaskService extends BaseApiService {
 
   Future<List<TodoTaskModel>> getTodoTasks() async {
     final response = await get('');
-    debugPrint('Raw response: $response');
     return (response as List)
         .map((json) => TodoTaskModel.fromJson(json))
         .toList();
+  }
+
+  Future<TodoTaskModel> getTodoTask(int id) async {
+    final response = await get('/$id');
+    return TodoTaskModel.fromJson(response);
   }
 }
