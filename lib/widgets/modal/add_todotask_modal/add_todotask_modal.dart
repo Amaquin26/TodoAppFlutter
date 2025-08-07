@@ -29,6 +29,13 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
   }
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -75,9 +82,7 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                     Navigator.pop(context);
                   },
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 12.0,
-                    ), // 👈 Effective padding
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text('Cancel'),
                   ),
                 ),
@@ -91,7 +96,6 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                   ),
                   onPressed: () async {
                     final newTodoTaskId = await _addTodoTask();
@@ -107,9 +111,7 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                     }
                   },
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 12.0,
-                    ), // 👈 Effective padding
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
                     child: Text('Add Task'),
                   ),
                 ),

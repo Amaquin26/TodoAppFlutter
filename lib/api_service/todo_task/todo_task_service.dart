@@ -26,18 +26,16 @@ class TodoTaskService extends BaseApiService {
     return response as int;
   }
 
-  Future<int> updateTodoTask({
+  Future<void> updateTodoTask({
     required int id,
-    required String name,
+    required String title,
     String? description,
   }) async {
     final response = await put('', {
       'id': id,
-      'name': name,
+      'title': title,
       if (description != null) 'description': description,
     });
-
-    return response as int;
   }
 
   Future<void> deleteTodoTask(int id) async {

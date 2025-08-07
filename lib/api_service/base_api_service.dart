@@ -72,6 +72,8 @@ abstract class BaseApiService {
 
   dynamic _processResponse(http.Response response, String errorMessage) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response.body.isEmpty) return null;
+
       return jsonDecode(response.body);
     } else {
       throw Exception('$errorMessage: ${response.statusCode}');

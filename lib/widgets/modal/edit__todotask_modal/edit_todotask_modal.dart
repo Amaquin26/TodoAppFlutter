@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
+import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
 
-class AddTodoSubtaskModal extends StatefulWidget {
+class EditTodotaskModal extends StatefulWidget {
   final int todoTaskId;
-  final Function onSubtaskAdded;
+  final String title;
+  final String? description;
+  final Function loadTodoTask;
 
-  const AddTodoSubtaskModal({
+  const EditTodotaskModal({
     super.key,
     required this.todoTaskId,
-    required this.onSubtaskAdded,
+    required this.title,
+    this.description,
+    required this.loadTodoTask,
   });
 
   @override
-  State<AddTodoSubtaskModal> createState() => _AddTodoSubtaskModalState();
+  State<EditTodotaskModal> createState() => _EditTodotaskModalState();
 }
 
-class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
-  final TodoSubtaskService _todoTaskService = TodoSubtaskService();
+class _EditTodotaskModalState extends State<EditTodotaskModal> {
+  final TodoTaskService _todoTaskService = TodoTaskService();
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
-  Future<int> _addTodoSubtask() async {
-    final newTodoTaskId = await _todoTaskService.addTodoSubtask(
-      todoTaskId: widget.todoTaskId,
-      name: _nameController.text,
-    );
-
-    // Clear the text fields
-    _nameController.clear();
-
-    return newTodoTaskId;
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.title;
+    if (widget.description != null) {
+      _descriptionController.text = widget.description!;
+    }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -47,15 +50,23 @@ class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Add New Todo Subtask',
+            'Edit Todo Task',
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
           const Divider(),
           const SizedBox(height: 16.0),
           TextField(
-            controller: _nameController,
+            controller: _titleController,
             decoration: InputDecoration(
-              labelText: 'Name',
+              labelText: 'Title',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          TextField(
+            controller: _descriptionController,
+            decoration: InputDecoration(
+              labelText: 'Description',
               border: OutlineInputBorder(),
             ),
           ),
@@ -93,15 +104,21 @@ class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
                     ),
                   ),
                   onPressed: () async {
-                    await _addTodoSubtask();
+                    await _todoTaskService.updateTodoTask(
+                      id: widget.todoTaskId,
+                      title: _titleController.text,
+                      description: _descriptionController.text,
+                    );
+
+                    widget.loadTodoTask();
+
                     if (mounted) {
                       Navigator.pop(context);
                     }
-                    widget.onSubtaskAdded();
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Add Subtask'),
+                    child: Text('Edit Task'),
                   ),
                 ),
               ),
