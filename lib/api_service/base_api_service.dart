@@ -1,13 +1,84 @@
-import 'dart:io';
+/* import 'dart:io'; */
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 abstract class BaseApiService {
   final String baseUrl;
-  static final _client = HttpClient();
+  /* static final _client = HttpClient(); */
 
   BaseApiService(this.baseUrl);
 
   Future<dynamic> get(String path) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl$path'));
+
+      return _processResponse(response, "GET $path failed");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> post(String path, Map<String, dynamic> data) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl$path'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      return _processResponse(response, "POST $path failed");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> put(String path, Map<String, dynamic> data) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl$path'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      return _processResponse(response, "PUT $path failed");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> patch(String path, Map<String, dynamic>? data) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('$baseUrl$path'),
+        headers: {'Content-Type': 'application/json'},
+        body: data != null ? jsonEncode(data) : null,
+      );
+
+      return _processResponse(response, "PATCH $path failed");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> delete(String path) async {
+    try {
+      final response = await http.delete(Uri.parse('$baseUrl$path'));
+
+      return _processResponse(response, "DELETE $path failed");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  dynamic _processResponse(http.Response response, String errorMessage) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('$errorMessage: ${response.statusCode}');
+    }
+  }
+
+  /* Future<dynamic> get(String path) async {
     try {
       final request = await _client.getUrl(Uri.parse('$baseUrl$path'));
 
@@ -103,5 +174,5 @@ abstract class BaseApiService {
 
   static void disposeClient() {
     _client.close(force: true);
-  }
+  } */
 }

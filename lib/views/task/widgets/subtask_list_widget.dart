@@ -6,15 +6,19 @@ import 'package:todo_app_flutter/widgets/templates/loader/page_loader/page_loade
 
 class SubtaskListWidget extends StatefulWidget {
   final int todoTaskId;
+  final Future<List<TodoSubtaskModel>> Function() loadSubtasks;
 
-  const SubtaskListWidget({super.key, required this.todoTaskId});
+  const SubtaskListWidget({
+    super.key,
+    required this.todoTaskId,
+    required this.loadSubtasks,
+  });
 
   @override
   State<SubtaskListWidget> createState() => _SubtaskListWidgetState();
 }
 
 class _SubtaskListWidgetState extends State<SubtaskListWidget> {
-  final TodoSubtaskService _todoSubtaskService = TodoSubtaskService();
   late List<TodoSubtaskModel> _todoSubtasks = [];
   bool _isLoading = true;
   bool _isError = false;
@@ -27,9 +31,7 @@ class _SubtaskListWidgetState extends State<SubtaskListWidget> {
 
   Future<void> _loadTodoSubtasks() async {
     try {
-      final todoSubtasks = await _todoSubtaskService.getTodoSubtasksByTaskId(
-        widget.todoTaskId,
-      );
+      final todoSubtasks = await widget.loadSubtasks();
       setState(() {
         _todoSubtasks = todoSubtasks;
         _isLoading = false;

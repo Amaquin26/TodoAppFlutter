@@ -3,6 +3,7 @@ import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
 import 'package:todo_app_flutter/models/todotask_model.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 import 'package:todo_app_flutter/widgets/card/task_card/task_card_widget.dart';
+import 'package:todo_app_flutter/widgets/modal/add_todotask_modal/add_todotask_modal.dart';
 import 'package:todo_app_flutter/widgets/templates/loader/page_loader/page_loader.dart';
 
 class HomeView extends StatefulWidget {
@@ -64,6 +65,23 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                topLeft: Radius.circular(20),
+              ),
+            ),
+            builder: ((context) {
+              return AddTodoTaskModal();
+            }),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
