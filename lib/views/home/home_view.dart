@@ -45,7 +45,21 @@ class _HomeViewState extends State<HomeView> {
         isLoading: _isLoading,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "Hey, User 👋",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "Here are your tasks for today",
+                style: TextStyle(color: Colors.black87, fontSize: 16),
+              ),
+              SizedBox(height: 16.0),
               ..._todoTasks.map(
                 (task) => GestureDetector(
                   onTap: () {
@@ -81,7 +95,7 @@ class _HomeViewState extends State<HomeView> {
             }),
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.assignment_add),
       ),
     );
   }

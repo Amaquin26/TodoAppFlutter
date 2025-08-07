@@ -15,7 +15,7 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  Future<int> _addTask() async {
+  Future<int> _addTodoTask() async {
     final newTodoTaskId = await _todoTaskService.addTodoTask(
       title: _titleController.text,
       description: _descriptionController.text,
@@ -94,7 +94,7 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                   ),
                   onPressed: () async {
-                    final newTodoTaskId = await _addTask();
+                    final newTodoTaskId = await _addTodoTask();
                     if (mounted) {
                       Navigator.pop(context);
                       Navigator.push(

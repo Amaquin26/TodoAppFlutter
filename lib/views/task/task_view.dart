@@ -108,8 +108,7 @@ class _TaskViewState extends State<TaskView> {
                 onSubtaskAdded: () async {
                   await _loadTodoSubtasks();
                   setState(() {
-                    _subtaskListKey =
-                        UniqueKey(); // ⚡️ forces rebuild of the child
+                    _subtaskListKey = UniqueKey();
                   });
                 },
               );

@@ -46,24 +46,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Hey, User 👋",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "There are 11 tasks to complete",
-              style: TextStyle(color: Colors.black87, fontSize: 16),
-            ),
-          ],
+        backgroundColor: Colors.grey[100],
+        title: Text(
+          'Todo App',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        centerTitle: true,
       ),
       body: ViewContainer(child: _pages[_currentIndex]),
       bottomNavigationBar: BottomNavigationWidget(

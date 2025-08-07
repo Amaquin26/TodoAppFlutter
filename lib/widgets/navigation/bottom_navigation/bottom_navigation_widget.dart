@@ -16,8 +16,11 @@ class BottomNavigationWidget extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: onTabSelected, // callback function
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+        BottomNavigationBarItem(icon: Icon(Icons.assignment), label: 'Tasks'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.assignment_turned_in),
+          label: 'Completed ',
+        ),
       ],
       selectedItemColor: Theme.of(context).colorScheme.primary,
     );

@@ -22,7 +22,7 @@ class TaskCardWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8),
               child: const Icon(
-                Icons.access_time,
+                Icons.assignment,
                 size: 32,
                 color: Colors.blueAccent,
               ),
