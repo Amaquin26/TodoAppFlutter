@@ -11,6 +11,25 @@ class TodoSubtaskService extends BaseApiService {
         .toList();
   }
 
+  Future<int> addTodoSubtask({
+    required int todoTaskId,
+    required String name,
+  }) async {
+    final response = await post('', {'todoTaskId': todoTaskId, 'name': name});
+
+    return response as int;
+  }
+
+  Future<int> updateTodoSubtask({required int id, required String name}) async {
+    final response = await put('', {'id': id, 'name': name});
+
+    return response as int;
+  }
+
+  Future<void> deleteTodoSubtask(int id) async {
+    await delete('/$id');
+  }
+
   Future<bool> toggleTodoSubtaskCheckStatus(int todoTaskId) async {
     final response = await patch('/$todoTaskId', null);
     return response as bool;

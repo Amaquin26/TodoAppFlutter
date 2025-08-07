@@ -16,4 +16,31 @@ class TodoTaskService extends BaseApiService {
     final response = await get('/$id');
     return TodoTaskModel.fromJson(response);
   }
+
+  Future<int> addTodoTask({required String title, String? description}) async {
+    final response = await post('', {
+      'title': title,
+      if (description != null) 'description': description,
+    });
+
+    return response as int;
+  }
+
+  Future<int> updateTodoTask({
+    required int id,
+    required String name,
+    String? description,
+  }) async {
+    final response = await put('', {
+      'id': id,
+      'name': name,
+      if (description != null) 'description': description,
+    });
+
+    return response as int;
+  }
+
+  Future<void> deleteTodoTask(int id) async {
+    await delete('/$id');
+  }
 }
