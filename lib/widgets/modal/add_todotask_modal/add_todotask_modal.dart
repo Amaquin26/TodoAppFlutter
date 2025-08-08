@@ -3,7 +3,9 @@ import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 
 class AddTodoTaskModal extends StatefulWidget {
-  const AddTodoTaskModal({super.key});
+  final VoidCallback loadTodTasks;
+
+  const AddTodoTaskModal({super.key, required this.loadTodTasks});
 
   @override
   State<AddTodoTaskModal> createState() => _AddTodoTaskModalState();
@@ -20,10 +22,6 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
       title: _titleController.text,
       description: _descriptionController.text,
     );
-
-    // Clear the text fields
-    _titleController.clear();
-    _descriptionController.clear();
 
     return newTodoTaskId;
   }
@@ -99,6 +97,14 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                   ),
                   onPressed: () async {
                     final newTodoTaskId = await _addTodoTask();
+
+                    // Clear the text fields
+                    _titleController.clear();
+                    _descriptionController.clear();
+
+                    // callback
+                    widget.loadTodTasks();
+
                     if (mounted) {
                       Navigator.pop(context);
                       Navigator.push(

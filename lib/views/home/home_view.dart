@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
+import 'package:todo_app_flutter/models/todotask_model.dart';
 import 'package:todo_app_flutter/views/home/widgets/tasks_list_widget.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todotask_modal/add_todotask_modal.dart';
 
@@ -10,6 +12,22 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final TodoTaskService _todoTaskService = TodoTaskService();
+
+  late Future<List<TodoTaskModel>> _todoTasks;
+
+  @override
+  void initState() {
+    super.initState();
+    _todoTasks = _todoTaskService.getTodoTasks();
+  }
+
+  Future<void> _loadTodTasks() async {
+    setState(() {
+      _todoTasks = _todoTaskService.getTodoTasks();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +48,18 @@ class _HomeViewState extends State<HomeView> {
               style: TextStyle(color: Colors.black87, fontSize: 16),
             ),
             SizedBox(height: 16.0),
-            TasksListWidget(),
+            FutureBuilder(
+              future: _todoTasks,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final List<TodoTaskModel> todoTasks = snapshot.requireData;
+
+                  return TasksListWidget(todoTasks: todoTasks);
+                }
+
+                return SizedBox.shrink();
+              },
+            ),
           ],
         ),
       ),
@@ -45,7 +74,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             builder: ((context) {
-              return AddTodoTaskModal();
+              return AddTodoTaskModal(loadTodTasks: _loadTodTasks);
             }),
           );
         },
