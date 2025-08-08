@@ -12,8 +12,13 @@ import 'package:todo_app_flutter/widgets/modal/add_todosubtask_modal/add_todosub
 
 class TaskView extends StatefulWidget {
   final int todoTaskId;
+  final VoidCallback loadTodTasks;
 
-  const TaskView({super.key, required this.todoTaskId});
+  const TaskView({
+    super.key,
+    required this.todoTaskId,
+    required this.loadTodTasks,
+  });
 
   @override
   State<TaskView> createState() => _TaskViewState();
@@ -35,7 +40,7 @@ class _TaskViewState extends State<TaskView> {
     );
   }
 
-  Future<void> _loadTodoSubtasks() async {
+  _loadTodoSubtasks() {
     setState(() {
       _todoSubtask = _todoSubtaskService.getTodoSubtasksByTaskId(
         widget.todoTaskId,
@@ -48,8 +53,8 @@ class _TaskViewState extends State<TaskView> {
       context: context,
       builder: (BuildContext context) {
         return ConfirmationDialog(
-          title: 'Delete Task',
-          content: 'Are you sure you want to delete this subtask?',
+          title: 'Delete Todo Task',
+          content: 'Are you sure you want to delete this task?',
           actions: [
             OutlinedButton(
               style: OutlinedButton.styleFrom(
@@ -78,9 +83,12 @@ class _TaskViewState extends State<TaskView> {
 
                 if (mounted)
                   {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const MyHomePage(),
+                      ),
+                      (Route<dynamic> route) =>
+                          false, // false means remove everything
                     ),
                   },
               },
@@ -128,6 +136,7 @@ class _TaskViewState extends State<TaskView> {
                           todoTaskId: todoTask.id,
                           title: todoTask.title,
                           description: todoTask.description,
+                          loadTodTasks: widget.loadTodTasks,
                         );
                       }
 
@@ -171,9 +180,7 @@ class _TaskViewState extends State<TaskView> {
             builder: ((context) {
               return AddTodoSubtaskModal(
                 todoTaskId: widget.todoTaskId,
-                onSubtaskAdded: () async {
-                  await _loadTodoSubtasks();
-                },
+                onSubtaskAdded: _loadTodoSubtasks,
               );
             }),
           );

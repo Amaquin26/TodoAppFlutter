@@ -6,12 +6,14 @@ class TaskInfoWidget extends StatefulWidget {
   final int todoTaskId;
   final String title;
   final String? description;
+  final VoidCallback loadTodTasks;
 
   const TaskInfoWidget({
     super.key,
     required this.todoTaskId,
     required this.title,
     this.description,
+    required this.loadTodTasks,
   });
 
   @override
@@ -37,6 +39,8 @@ class _TaskInfoWidgetState extends State<TaskInfoWidget> {
       _title = todoTask.title;
       _description = todoTask.description;
     });
+
+    widget.loadTodTasks();
   }
 
   @override

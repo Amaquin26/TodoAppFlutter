@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
-import 'package:todo_app_flutter/views/task/task_view.dart';
 import 'package:todo_app_flutter/widgets/card/base_card_widget.dart';
 import 'package:todo_app_flutter/widgets/dialog/confirmation_dialog/confirmation_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/bottom_modal/bottom_modal.dart';
@@ -62,7 +61,7 @@ class _SubtaskCardWidgetState extends State<SubtaskCardWidget> {
       context: context,
       builder: (BuildContext context) {
         return ConfirmationDialog(
-          title: 'Delete Subtask',
+          title: 'Delete Todo Subtask',
           content: 'Are you sure you want to delete this subtask?',
           actions: [
             OutlinedButton(

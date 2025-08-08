@@ -110,8 +110,10 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              TaskView(todoTaskId: newTodoTaskId),
+                          builder: (context) => TaskView(
+                            todoTaskId: newTodoTaskId,
+                            loadTodTasks: widget.loadTodTasks,
+                          ),
                         ),
                       );
                     }

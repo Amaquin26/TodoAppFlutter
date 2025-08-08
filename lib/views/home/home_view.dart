@@ -22,7 +22,7 @@ class _HomeViewState extends State<HomeView> {
     _todoTasks = _todoTaskService.getTodoTasks();
   }
 
-  Future<void> _loadTodTasks() async {
+  _loadTodTasks() {
     setState(() {
       _todoTasks = _todoTaskService.getTodoTasks();
     });
@@ -54,7 +54,10 @@ class _HomeViewState extends State<HomeView> {
                 if (snapshot.hasData) {
                   final List<TodoTaskModel> todoTasks = snapshot.requireData;
 
-                  return TasksListWidget(todoTasks: todoTasks);
+                  return TasksListWidget(
+                    todoTasks: todoTasks,
+                    loadTodTasks: _loadTodTasks,
+                  );
                 }
 
                 return SizedBox.shrink();
