@@ -4,8 +4,13 @@ import 'package:todo_app_flutter/widgets/card/subtask_card/subtask_card_widget.d
 
 class SubtaskListWidget extends StatefulWidget {
   final List<TodoSubtaskModel> todoSubtasks;
+  final VoidCallback loadTodoSubtasks;
 
-  const SubtaskListWidget({super.key, required this.todoSubtasks});
+  const SubtaskListWidget({
+    super.key,
+    required this.todoSubtasks,
+    required this.loadTodoSubtasks,
+  });
 
   @override
   State<SubtaskListWidget> createState() => _SubtaskListWidgetState();
@@ -24,8 +29,10 @@ class _SubtaskListWidgetState extends State<SubtaskListWidget> {
         ...widget.todoSubtasks.map(
           (todoSubtask) => SubtaskCardWidget(
             id: todoSubtask.id,
+            todoTaskId: todoSubtask.todoTaskId,
             name: todoSubtask.name,
             isChecked: todoSubtask.isChecked,
+            loadTodoSubtasks: widget.loadTodoSubtasks,
           ),
         ),
       ],

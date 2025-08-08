@@ -1,44 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
 
-class EditTodotaskModal extends StatefulWidget {
-  final int todoTaskId;
+class BottomModal extends StatefulWidget {
   final String title;
-  final String? description;
-  final Function loadTodoTask;
+  final String textInputTitle;
+  final String onPressButtonTitle;
+  final Function(String) onPress;
+  final String? initTextValue;
 
-  const EditTodotaskModal({
+  const BottomModal({
     super.key,
-    required this.todoTaskId,
     required this.title,
-    this.description,
-    required this.loadTodoTask,
+    required this.onPressButtonTitle,
+    required this.textInputTitle,
+    required this.onPress,
+    this.initTextValue,
   });
 
   @override
-  State<EditTodotaskModal> createState() => _EditTodotaskModalState();
+  State<BottomModal> createState() => _BottomModalState();
 }
 
-class _EditTodotaskModalState extends State<EditTodotaskModal> {
-  final TodoTaskService _todoTaskService = TodoTaskService();
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+class _BottomModalState extends State<BottomModal> {
+  final TextEditingController _textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _titleController.text = widget.title;
-    if (widget.description != null) {
-      _descriptionController.text = widget.description!;
-    }
-  }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
+    if (widget.initTextValue != null) {
+      _textController.text = widget.initTextValue!;
+    }
   }
 
   @override
@@ -50,23 +41,15 @@ class _EditTodotaskModalState extends State<EditTodotaskModal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Edit Todo Task',
+            widget.title,
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
           const Divider(),
           const SizedBox(height: 16.0),
           TextField(
-            controller: _titleController,
+            controller: _textController,
             decoration: InputDecoration(
-              labelText: 'Title',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          TextField(
-            controller: _descriptionController,
-            decoration: InputDecoration(
-              labelText: 'Description',
+              labelText: widget.textInputTitle,
               border: OutlineInputBorder(),
             ),
           ),
@@ -103,22 +86,10 @@ class _EditTodotaskModalState extends State<EditTodotaskModal> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  onPressed: () async {
-                    await _todoTaskService.updateTodoTask(
-                      id: widget.todoTaskId,
-                      title: _titleController.text,
-                      description: _descriptionController.text,
-                    );
-
-                    widget.loadTodoTask();
-
-                    if (mounted) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: const Padding(
+                  onPressed: () => widget.onPress(_textController.text),
+                  child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Save'),
+                    child: Text(widget.onPressButtonTitle),
                   ),
                 ),
               ),

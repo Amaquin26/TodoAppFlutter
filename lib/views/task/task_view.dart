@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
 import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
+import 'package:todo_app_flutter/main.dart';
 import 'package:todo_app_flutter/models/todosubtask_model.dart';
 import 'package:todo_app_flutter/models/todotask_model.dart';
 import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
 import 'package:todo_app_flutter/views/task/widgets/task_info_widget.dart';
+import 'package:todo_app_flutter/widgets/app_bar/chevron_app_bar/chevron_app_bar.dart';
+import 'package:todo_app_flutter/widgets/dialog/confirmation_dialog/confirmation_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todosubtask_modal/add_todosubtask_modal.dart';
 
 class TaskView extends StatefulWidget {
@@ -40,10 +43,73 @@ class _TaskViewState extends State<TaskView> {
     });
   }
 
+  Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+    await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Delete Task',
+          content: 'Are you sure you want to delete this subtask?',
+          actions: [
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.primary,
+                side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text('Cancel'),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onPressed: () async => {
+                await _todoTaskService.deleteTodoTask(widget.todoTaskId),
+
+                if (mounted)
+                  {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                    ),
+                  },
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text('Delete'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: ChevronAppBar(
+        title: 'Task Viewing',
+        actions: [
+          IconButton(
+            onPressed: () => _showDeleteConfirmationDialog(context),
+            icon: Icon(
+              Icons.delete,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ],
+      ),
       body: PageView(
         children: [
           SingleChildScrollView(
@@ -77,7 +143,10 @@ class _TaskViewState extends State<TaskView> {
                         final List<TodoSubtaskModel> todoSubtasks =
                             snapshot.requireData;
 
-                        return SubtaskListWidget(todoSubtasks: todoSubtasks);
+                        return SubtaskListWidget(
+                          todoSubtasks: todoSubtasks,
+                          loadTodoSubtasks: _loadTodoSubtasks,
+                        );
                       }
 
                       return Center(child: CircularProgressIndicator());
