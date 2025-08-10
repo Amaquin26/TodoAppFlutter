@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
+import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
 class EditTodotaskModal extends StatefulWidget {
   final int todoTaskId;
@@ -43,89 +44,79 @@ class _EditTodotaskModalState extends State<EditTodotaskModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Edit Todo Task',
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+    return BaseBottomSheetModal(
+      title: 'Edit Todo Task',
+      children: [
+        TextField(
+          controller: _titleController,
+          decoration: InputDecoration(
+            labelText: 'Title',
+            border: OutlineInputBorder(),
           ),
-          const Divider(),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: _titleController,
-            decoration: InputDecoration(
-              labelText: 'Title',
-              border: OutlineInputBorder(),
-            ),
+        ),
+        const SizedBox(height: 8.0),
+        TextField(
+          controller: _descriptionController,
+          decoration: InputDecoration(
+            labelText: 'Description',
+            border: OutlineInputBorder(),
           ),
-          const SizedBox(height: 8.0),
-          TextField(
-            controller: _descriptionController,
-            decoration: InputDecoration(
-              labelText: 'Description',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 16.0),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
+        ),
+        const SizedBox(height: 16.0),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: () {
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Cancel'),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onPressed: () async {
+                  await _todoTaskService.updateTodoTask(
+                    id: widget.todoTaskId,
+                    title: _titleController.text,
+                    description: _descriptionController.text,
+                  );
+
+                  widget.loadTodoTask();
+
+                  if (mounted) {
                     Navigator.pop(context);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Cancel'),
-                  ),
+                  }
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Save'),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onPressed: () async {
-                    await _todoTaskService.updateTodoTask(
-                      id: widget.todoTaskId,
-                      title: _titleController.text,
-                      description: _descriptionController.text,
-                    );
-
-                    widget.loadTodoTask();
-
-                    if (mounted) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Save'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

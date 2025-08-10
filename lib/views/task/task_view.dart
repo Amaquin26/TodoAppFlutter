@@ -8,6 +8,7 @@ import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
 import 'package:todo_app_flutter/views/task/widgets/task_info_widget.dart';
 import 'package:todo_app_flutter/widgets/app_bar/chevron_app_bar/chevron_app_bar.dart';
 import 'package:todo_app_flutter/widgets/dialog/confirmation_dialog/confirmation_dialog.dart';
+import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todosubtask_modal/add_todosubtask_modal.dart';
 
 class TaskView extends StatefulWidget {
@@ -52,52 +53,21 @@ class _TaskViewState extends State<TaskView> {
     await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        return ConfirmationDialog(
+        return DeleteDialog(
           title: 'Delete Todo Task',
           content: 'Are you sure you want to delete this task?',
-          actions: [
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.primary,
-                side: BorderSide(color: Theme.of(context).colorScheme.primary),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text('Cancel'),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onPressed: () async => {
-                await _todoTaskService.deleteTodoTask(widget.todoTaskId),
+          onPressedCancel: () => Navigator.of(context).pop(false),
+          onPressedDelete: () async => {
+            await _todoTaskService.deleteTodoTask(widget.todoTaskId),
 
-                if (mounted)
-                  {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => const MyHomePage(),
-                      ),
-                      (Route<dynamic> route) =>
-                          false, // false means remove everything
-                    ),
-                  },
+            if (mounted)
+              {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const MyHomePage()),
+                  (Route<dynamic> route) => false,
+                ),
               },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text('Delete'),
-              ),
-            ),
-          ],
+          },
         );
       },
     );

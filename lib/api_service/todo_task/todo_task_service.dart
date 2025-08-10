@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/base_api_service.dart';
 import 'package:todo_app_flutter/models/todotask_model.dart';
+import '../../config/config.dart';
 
 class TodoTaskService extends BaseApiService {
-  TodoTaskService() : super('http://localhost:5000/api/TodoTask');
+  TodoTaskService() : super('$baseApiUrl/TodoTask');
 
   Future<List<TodoTaskModel>> getTodoTasks() async {
     final response = await get('');

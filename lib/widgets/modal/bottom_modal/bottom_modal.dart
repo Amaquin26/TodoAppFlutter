@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
 class BottomModal extends StatefulWidget {
   final String title;
@@ -34,69 +35,59 @@ class _BottomModalState extends State<BottomModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.title,
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+    return BaseBottomSheetModal(
+      title: widget.title,
+      children: [
+        TextField(
+          controller: _textController,
+          decoration: InputDecoration(
+            labelText: widget.textInputTitle,
+            border: OutlineInputBorder(),
           ),
-          const Divider(),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: _textController,
-            decoration: InputDecoration(
-              labelText: widget.textInputTitle,
-              border: OutlineInputBorder(),
+        ),
+        const SizedBox(height: 16.0),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Cancel'),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Cancel'),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onPressed: () => widget.onPress(_textController.text),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text(widget.onPressButtonTitle),
-                  ),
+                onPressed: () => widget.onPress(_textController.text),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(widget.onPressButtonTitle),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

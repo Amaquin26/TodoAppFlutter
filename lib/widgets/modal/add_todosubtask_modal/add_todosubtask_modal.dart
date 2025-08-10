@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
+import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
 class AddTodoSubtaskModal extends StatefulWidget {
   final int todoTaskId;
@@ -40,75 +41,65 @@ class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Add New Todo Subtask',
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+    return BaseBottomSheetModal(
+      title: 'Add New Todo Subtask',
+      children: [
+        TextField(
+          controller: _nameController,
+          decoration: InputDecoration(
+            labelText: 'Name',
+            border: OutlineInputBorder(),
           ),
-          const Divider(),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(),
+        ),
+        const SizedBox(height: 16.0),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Cancel'),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  onPressed: () {
+                ),
+                onPressed: () async {
+                  await _addTodoSubtask();
+                  if (mounted) {
                     Navigator.pop(context);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Cancel'),
-                  ),
+                  }
+                  widget.onSubtaskAdded();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text('Add Subtask'),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onPressed: () async {
-                    await _addTodoSubtask();
-                    if (mounted) {
-                      Navigator.pop(context);
-                    }
-                    widget.onSubtaskAdded();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text('Add Subtask'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

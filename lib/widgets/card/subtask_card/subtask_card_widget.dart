@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
 import 'package:todo_app_flutter/widgets/card/base_card_widget.dart';
 import 'package:todo_app_flutter/widgets/dialog/confirmation_dialog/confirmation_dialog.dart';
+import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/bottom_modal/bottom_modal.dart';
 
 class SubtaskCardWidget extends StatefulWidget {
@@ -60,45 +61,17 @@ class _SubtaskCardWidgetState extends State<SubtaskCardWidget> {
     await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        return ConfirmationDialog(
+        return DeleteDialog(
           title: 'Delete Todo Subtask',
           content: 'Are you sure you want to delete this subtask?',
-          actions: [
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.primary,
-                side: BorderSide(color: Theme.of(context).colorScheme.primary),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text('Cancel'),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onPressed: () async => {
-                await _todoSubtaskService.deleteTodoSubtask(widget.id),
+          onPressedCancel: () => Navigator.of(context).pop(false),
+          onPressedDelete: () async => {
+            await _todoSubtaskService.deleteTodoSubtask(widget.id),
 
-                if (mounted) {Navigator.pop(context)},
+            if (mounted) {Navigator.pop(context)},
 
-                widget.loadTodoSubtasks(),
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text('Delete'),
-              ),
-            ),
-          ],
+            widget.loadTodoSubtasks(),
+          },
         );
       },
     );
