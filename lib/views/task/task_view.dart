@@ -7,7 +7,6 @@ import 'package:todo_app_flutter/models/todotask_model.dart';
 import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
 import 'package:todo_app_flutter/views/task/widgets/task_info_widget.dart';
 import 'package:todo_app_flutter/widgets/app_bar/chevron_app_bar/chevron_app_bar.dart';
-import 'package:todo_app_flutter/widgets/dialog/confirmation_dialog/confirmation_dialog.dart';
 import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todosubtask_modal/add_todosubtask_modal.dart';
 

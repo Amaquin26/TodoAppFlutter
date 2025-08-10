@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
 import 'package:todo_app_flutter/widgets/card/base_card_widget.dart';
-import 'package:todo_app_flutter/widgets/dialog/confirmation_dialog/confirmation_dialog.dart';
 import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/bottom_modal/bottom_modal.dart';
 
