@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
 import 'package:todo_app_flutter/widgets/modal/edit__todotask_modal/edit_todotask_modal.dart';
 
 class TaskInfoWidget extends StatefulWidget {
   final int todoTaskId;
   final String title;
   final String? description;
-  final VoidCallback loadTodTasks;
 
   const TaskInfoWidget({
     super.key,
     required this.todoTaskId,
     required this.title,
     this.description,
-    required this.loadTodTasks,
   });
 
   @override
@@ -21,7 +18,6 @@ class TaskInfoWidget extends StatefulWidget {
 }
 
 class _TaskInfoWidgetState extends State<TaskInfoWidget> {
-  final TodoTaskService _todoTaskService = TodoTaskService();
   late String _title;
   late String? _description;
 
@@ -30,17 +26,6 @@ class _TaskInfoWidgetState extends State<TaskInfoWidget> {
     super.initState();
     _title = widget.title;
     _description = widget.description;
-  }
-
-  Future<void> _loadTodoTask() async {
-    final todoTask = await _todoTaskService.getTodoTask(widget.todoTaskId);
-
-    setState(() {
-      _title = todoTask.title;
-      _description = todoTask.description;
-    });
-
-    widget.loadTodTasks();
   }
 
   @override
@@ -68,7 +53,6 @@ class _TaskInfoWidgetState extends State<TaskInfoWidget> {
                     todoTaskId: widget.todoTaskId,
                     title: widget.title,
                     description: widget.description,
-                    loadTodoTask: _loadTodoTask,
                   );
                 }),
               );

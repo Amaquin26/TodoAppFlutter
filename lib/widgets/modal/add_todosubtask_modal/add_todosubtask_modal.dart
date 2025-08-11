@@ -27,9 +27,6 @@ class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
       name: _nameController.text,
     );
 
-    // Clear the text fields
-    _nameController.clear();
-
     return newTodoTaskId;
   }
 
@@ -86,6 +83,10 @@ class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
                 ),
                 onPressed: () async {
                   await _addTodoSubtask();
+
+                  // Clear the text fields
+                  _nameController.clear();
+
                   if (mounted) {
                     Navigator.pop(context);
                   }

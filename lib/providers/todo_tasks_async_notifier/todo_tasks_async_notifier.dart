@@ -1,0 +1,59 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:todo_app_flutter/providers/todo_tasks_provider/todo_tasks_provider.dart';
+
+class TodoTasksNotifier extends AsyncNotifier<List<TodoTaskModel>> {
+  @override
+  Future<List<TodoTaskModel>> build() async {
+    final service = ref.read(todoTasksServiceProvider);
+    return service.getTodoTasks();
+  }
+
+  Future<TodoTaskModel> getTodoTask(int id) async {
+    final service = ref.read(todoTasksServiceProvider);
+    return service.getTodoTask(id);
+  }
+
+  Future<int> addTodoTask({required String title, String? description}) async {
+    final service = ref.read(todoTasksServiceProvider);
+    final id = await service.addTodoTask(
+      title: title,
+      description: description,
+    );
+    await refreshTodoTasks();
+    return id; // return to caller
+  }
+
+  Future<void> updateTodoTask({
+    required int id,
+    required String title,
+    String? description,
+  }) async {
+    final service = ref.read(todoTasksServiceProvider);
+    await service.updateTodoTask(
+      id: id,
+      title: title,
+      description: description,
+    );
+    await refreshTodoTasks();
+  }
+
+  Future<void> deleteTodoTask(int id) async {
+    final service = ref.read(todoTasksServiceProvider);
+    await service.deleteTodoTask(id);
+    await refreshTodoTasks();
+  }
+
+  Future<void> refreshTodoTasks() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final service = ref.read(todoTasksServiceProvider);
+      return service.getTodoTasks();
+    });
+  }
+}
+
+final todoTasksProvider =
+    AsyncNotifierProvider<TodoTasksNotifier, List<TodoTaskModel>>(
+      TodoTasksNotifier.new,
+    );

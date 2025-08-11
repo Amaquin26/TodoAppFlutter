@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
-class AddTodoTaskModal extends StatefulWidget {
-  final VoidCallback loadTodTasks;
-
-  const AddTodoTaskModal({super.key, required this.loadTodTasks});
+class AddTodoTaskModal extends ConsumerStatefulWidget {
+  const AddTodoTaskModal({super.key});
 
   @override
-  State<AddTodoTaskModal> createState() => _AddTodoTaskModalState();
+  ConsumerState<AddTodoTaskModal> createState() => _AddTodoTaskModalState();
 }
 
-class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
-  final TodoTaskService _todoTaskService = TodoTaskService();
-
+class _AddTodoTaskModalState extends ConsumerState<AddTodoTaskModal> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   Future<int> _addTodoTask() async {
-    final newTodoTaskId = await _todoTaskService.addTodoTask(
+    final notifier = ref.read(todoTasksProvider.notifier);
+
+    final newTodoTaskId = await notifier.addTodoTask(
       title: _titleController.text,
       description: _descriptionController.text,
     );
@@ -94,18 +93,13 @@ class _AddTodoTaskModalState extends State<AddTodoTaskModal> {
                   _titleController.clear();
                   _descriptionController.clear();
 
-                  // callback
-                  widget.loadTodTasks();
-
                   if (mounted) {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TaskView(
-                          todoTaskId: newTodoTaskId,
-                          loadTodTasks: widget.loadTodTasks,
-                        ),
+                        builder: (context) =>
+                            TaskView(todoTaskId: newTodoTaskId),
                       ),
                     );
                   }

@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
-import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
 import 'package:todo_app_flutter/main.dart';
 import 'package:todo_app_flutter/models/todosubtask_model.dart';
 import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:todo_app_flutter/providers/todo_task_future_provider.dart/todo_task_future_provider.dart';
+import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
 import 'package:todo_app_flutter/views/task/widgets/task_info_widget.dart';
 import 'package:todo_app_flutter/widgets/app_bar/chevron_app_bar/chevron_app_bar.dart';
 import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todosubtask_modal/add_todosubtask_modal.dart';
 
-class TaskView extends StatefulWidget {
+class TaskView extends ConsumerStatefulWidget {
   final int todoTaskId;
-  final VoidCallback loadTodTasks;
-
-  const TaskView({
-    super.key,
-    required this.todoTaskId,
-    required this.loadTodTasks,
-  });
+  const TaskView({super.key, required this.todoTaskId});
 
   @override
-  State<TaskView> createState() => _TaskViewState();
+  ConsumerState<TaskView> createState() => _TaskViewState();
 }
 
-class _TaskViewState extends State<TaskView> {
-  final TodoTaskService _todoTaskService = TodoTaskService();
+class _TaskViewState extends ConsumerState<TaskView> {
   final TodoSubtaskService _todoSubtaskService = TodoSubtaskService();
 
-  late Future<TodoTaskModel> _todoTask;
   late Future<List<TodoSubtaskModel>> _todoSubtask;
 
   @override
   void initState() {
     super.initState();
-    _todoTask = _todoTaskService.getTodoTask(widget.todoTaskId);
     _todoSubtask = _todoSubtaskService.getTodoSubtasksByTaskId(
       widget.todoTaskId,
     );
+  }
+
+  _deleteTodoTask() async {
+    final notifier = ref.read(todoTasksProvider.notifier);
+
+    await notifier.deleteTodoTask(widget.todoTaskId);
   }
 
   _loadTodoSubtasks() {
@@ -57,7 +56,7 @@ class _TaskViewState extends State<TaskView> {
           content: 'Are you sure you want to delete this task?',
           onPressedCancel: () => Navigator.of(context).pop(false),
           onPressedDelete: () async => {
-            await _todoTaskService.deleteTodoTask(widget.todoTaskId),
+            await _deleteTodoTask(),
 
             if (mounted)
               {
@@ -95,21 +94,22 @@ class _TaskViewState extends State<TaskView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FutureBuilder(
-                    future: _todoTask,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final TodoTaskModel todoTask = snapshot.requireData;
+                  Consumer(
+                    builder: (context, builder, _) {
+                      final notifier = ref.watch(
+                        todoTaskFutureProvider(widget.todoTaskId),
+                      );
 
-                        return TaskInfoWidget(
-                          todoTaskId: todoTask.id,
-                          title: todoTask.title,
-                          description: todoTask.description,
-                          loadTodTasks: widget.loadTodTasks,
-                        );
-                      }
-
-                      return SizedBox.shrink();
+                      return notifier.when(
+                        data: (task) => TaskInfoWidget(
+                          todoTaskId: task.id,
+                          title: task.title,
+                          description: task.description,
+                        ),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (error, stack) => Text('Error: $error'),
+                      );
                     },
                   ),
                   Divider(),

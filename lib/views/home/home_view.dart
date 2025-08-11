@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_task/todo_task_service.dart';
-import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/home/widgets/tasks_list_widget.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todotask_modal/add_todotask_modal.dart';
 
@@ -12,22 +12,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final TodoTaskService _todoTaskService = TodoTaskService();
-
-  late Future<List<TodoTaskModel>> _todoTasks;
-
-  @override
-  void initState() {
-    super.initState();
-    _todoTasks = _todoTaskService.getTodoTasks();
-  }
-
-  _loadTodTasks() {
-    setState(() {
-      _todoTasks = _todoTaskService.getTodoTasks();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,19 +32,18 @@ class _HomeViewState extends State<HomeView> {
               style: TextStyle(color: Colors.black87, fontSize: 16),
             ),
             SizedBox(height: 16.0),
-            FutureBuilder(
-              future: _todoTasks,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final List<TodoTaskModel> todoTasks = snapshot.requireData;
+            Consumer(
+              builder: (context, ref, _) {
+                final todoTasksAsync = ref.watch(todoTasksProvider);
 
-                  return TasksListWidget(
-                    todoTasks: todoTasks,
-                    loadTodTasks: _loadTodTasks,
-                  );
-                }
-
-                return SizedBox.shrink();
+                return todoTasksAsync.when(
+                  data: (todoTasks) {
+                    return TasksListWidget(todoTasks: todoTasks);
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Text('Error: $err'),
+                );
               },
             ),
           ],
@@ -77,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             builder: ((context) {
-              return AddTodoTaskModal(loadTodTasks: _loadTodTasks);
+              return AddTodoTaskModal();
             }),
           );
         },
