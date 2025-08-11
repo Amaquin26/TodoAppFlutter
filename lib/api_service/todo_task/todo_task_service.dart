@@ -31,7 +31,7 @@ class TodoTaskService extends BaseApiService {
     required String title,
     String? description,
   }) async {
-    final response = await put('', {
+    await put('', {
       'id': id,
       'title': title,
       if (description != null) 'description': description,
