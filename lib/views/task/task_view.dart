@@ -20,9 +20,9 @@ class TaskView extends ConsumerStatefulWidget {
 
 class _TaskViewState extends ConsumerState<TaskView> {
   _deleteTodoTask() async {
-    final notifier = ref.read(todoTasksProvider.notifier);
+    final todoTasksNotifier = ref.read(todoTasksProvider.notifier);
 
-    await notifier.deleteTodoTask(widget.todoTaskId);
+    await todoTasksNotifier.deleteTodoTask(widget.todoTaskId);
   }
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context) async {

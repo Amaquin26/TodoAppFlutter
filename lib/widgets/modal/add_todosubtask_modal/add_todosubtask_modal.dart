@@ -17,9 +17,11 @@ class _AddTodoSubtaskModalState extends ConsumerState<AddTodoSubtaskModal> {
   final TextEditingController _nameController = TextEditingController();
 
   Future<int> _addTodoSubtask() async {
-    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+    final todoSubtasksNotifier = ref.read(
+      todoSubtasksProvider(widget.todoTaskId).notifier,
+    );
 
-    final newTodoTaskId = await notifier.addTodoSubtask(
+    final newTodoTaskId = await todoSubtasksNotifier.addTodoSubtask(
       todoTaskId: widget.todoTaskId,
       name: _nameController.text,
     );

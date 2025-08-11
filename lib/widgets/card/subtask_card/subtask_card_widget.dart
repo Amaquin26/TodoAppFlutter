@@ -35,10 +35,14 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
   }
 
   Future<void> _toggleCheckStatus(bool? value) async {
-    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+    final todoSubtasksNotifier = ref.read(
+      todoSubtasksProvider(widget.todoTaskId).notifier,
+    );
 
     try {
-      final newStatus = await notifier.toggleTodoSubtaskCheckStatus(widget.id);
+      final newStatus = await todoSubtasksNotifier.toggleTodoSubtaskCheckStatus(
+        widget.id,
+      );
       setState(() {
         _isChecked = newStatus;
       });
@@ -46,10 +50,12 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
   }
 
   Future<void> _updateTodoSubtask(String name) async {
-    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+    final todoSubtasksNotifier = ref.read(
+      todoSubtasksProvider(widget.todoTaskId).notifier,
+    );
 
     try {
-      await notifier.updateTodoSubtask(
+      await todoSubtasksNotifier.updateTodoSubtask(
         id: widget.id,
         todoTaskId: widget.todoTaskId,
         name: name,
@@ -60,9 +66,11 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
   }
 
   Future<void> _deleteTodoSubtask() async {
-    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+    final todoSubtasksNotifier = ref.read(
+      todoSubtasksProvider(widget.todoTaskId).notifier,
+    );
 
-    await notifier.deleteTodoSubtask(
+    await todoSubtasksNotifier.deleteTodoSubtask(
       id: widget.id,
       todoTaskId: widget.todoTaskId,
     );

@@ -16,9 +16,9 @@ class _AddTodoTaskModalState extends ConsumerState<AddTodoTaskModal> {
   final TextEditingController _descriptionController = TextEditingController();
 
   Future<int> _addTodoTask() async {
-    final notifier = ref.read(todoTasksProvider.notifier);
+    final todoTasksNotifier = ref.read(todoTasksProvider.notifier);
 
-    final newTodoTaskId = await notifier.addTodoTask(
+    final newTodoTaskId = await todoTasksNotifier.addTodoTask(
       title: _titleController.text,
       description: _descriptionController.text,
     );
