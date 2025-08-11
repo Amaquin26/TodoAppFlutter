@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/providers/todo_task_future_provider.dart/todo_task_future_provider.dart';
+import 'package:todo_app_flutter/providers/todo_task_async_notifier/todo_task_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
@@ -41,15 +41,18 @@ class _EditTodotaskModalState extends ConsumerState<EditTodotaskModal> {
   }
 
   Future<void> _updateTodoTask() async {
-    final notifier = ref.read(todoTasksProvider.notifier);
+    final todoTaskNotifier = ref.read(
+      todoTaskProvider(widget.todoTaskId).notifier,
+    );
+    final todoTasksNotifier = ref.read(todoTasksProvider.notifier);
 
-    await notifier.updateTodoTask(
+    await todoTaskNotifier.updateTodoTask(
       id: widget.todoTaskId,
       title: _titleController.text,
       description: _descriptionController.text,
     );
 
-    ref.invalidate(todoTaskFutureProvider(widget.todoTaskId));
+    await todoTasksNotifier.refreshTodoTasks();
   }
 
   @override

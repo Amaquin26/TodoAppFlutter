@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app_flutter/main.dart';
 import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
-import 'package:todo_app_flutter/providers/todo_task_future_provider.dart/todo_task_future_provider.dart';
+import 'package:todo_app_flutter/providers/todo_task_async_notifier/todo_task_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
 import 'package:todo_app_flutter/views/task/widgets/task_info_widget.dart';
@@ -74,11 +74,11 @@ class _TaskViewState extends ConsumerState<TaskView> {
                 children: [
                   Consumer(
                     builder: (context, builder, _) {
-                      final notifier = ref.watch(
-                        todoTaskFutureProvider(widget.todoTaskId),
+                      final todoTaskAsync = ref.watch(
+                        todoTaskProvider(widget.todoTaskId),
                       );
 
-                      return notifier.when(
+                      return todoTaskAsync.when(
                         data: (task) => TaskInfoWidget(
                           todoTaskId: task.id,
                           title: task.title,
