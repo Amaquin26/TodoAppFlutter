@@ -152,7 +152,7 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
                                 _name = textValue;
                               }),
 
-                              if (mounted) {Navigator.pop(context)},
+                              if (context.mounted) {Navigator.pop(context)},
                             },
                             initTextValue: _name,
                           );

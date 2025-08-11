@@ -36,7 +36,7 @@ class _TaskViewState extends ConsumerState<TaskView> {
           onPressedDelete: () async => {
             await _deleteTodoTask(),
 
-            if (mounted)
+            if (context.mounted)
               {
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const MyHomePage()),

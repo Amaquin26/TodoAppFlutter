@@ -93,7 +93,7 @@ class _AddTodoTaskModalState extends ConsumerState<AddTodoTaskModal> {
                   _titleController.clear();
                   _descriptionController.clear();
 
-                  if (mounted) {
+                  if (context.mounted) {
                     Navigator.pop(context);
                     Navigator.push(
                       context,

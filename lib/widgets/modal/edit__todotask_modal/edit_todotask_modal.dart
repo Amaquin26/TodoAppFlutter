@@ -111,7 +111,7 @@ class _EditTodotaskModalState extends ConsumerState<EditTodotaskModal> {
                 onPressed: () async {
                   await _updateTodoTask();
 
-                  if (mounted) {
+                  if (context.mounted) {
                     Navigator.pop(context);
                   }
                 },

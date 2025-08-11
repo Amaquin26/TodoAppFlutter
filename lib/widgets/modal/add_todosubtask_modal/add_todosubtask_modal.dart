@@ -84,7 +84,7 @@ class _AddTodoSubtaskModalState extends ConsumerState<AddTodoSubtaskModal> {
                   // Clear the text fields
                   _nameController.clear();
 
-                  if (mounted) {
+                  if (context.mounted) {
                     Navigator.pop(context);
                   }
                 },
