@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
 import 'package:todo_app_flutter/main.dart';
-import 'package:todo_app_flutter/models/todosubtask_model.dart';
-import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_task_future_provider.dart/todo_task_future_provider.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
@@ -21,30 +19,10 @@ class TaskView extends ConsumerStatefulWidget {
 }
 
 class _TaskViewState extends ConsumerState<TaskView> {
-  final TodoSubtaskService _todoSubtaskService = TodoSubtaskService();
-
-  late Future<List<TodoSubtaskModel>> _todoSubtask;
-
-  @override
-  void initState() {
-    super.initState();
-    _todoSubtask = _todoSubtaskService.getTodoSubtasksByTaskId(
-      widget.todoTaskId,
-    );
-  }
-
   _deleteTodoTask() async {
     final notifier = ref.read(todoTasksProvider.notifier);
 
     await notifier.deleteTodoTask(widget.todoTaskId);
-  }
-
-  _loadTodoSubtasks() {
-    setState(() {
-      _todoSubtask = _todoSubtaskService.getTodoSubtasksByTaskId(
-        widget.todoTaskId,
-      );
-    });
   }
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
@@ -114,20 +92,19 @@ class _TaskViewState extends ConsumerState<TaskView> {
                   ),
                   Divider(),
                   SizedBox(height: 8.0),
-                  FutureBuilder(
-                    future: _todoSubtask,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final List<TodoSubtaskModel> todoSubtasks =
-                            snapshot.requireData;
+                  Consumer(
+                    builder: (context, builder, _) {
+                      final todoSubtasksAsync = ref.watch(
+                        todoSubtasksProvider(widget.todoTaskId),
+                      );
 
-                        return SubtaskListWidget(
-                          todoSubtasks: todoSubtasks,
-                          loadTodoSubtasks: _loadTodoSubtasks,
-                        );
-                      }
-
-                      return Center(child: CircularProgressIndicator());
+                      return todoSubtasksAsync.when(
+                        data: (todoSubtasks) =>
+                            SubtaskListWidget(todoSubtasks: todoSubtasks),
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (error, stack) => Text('Error: $error'),
+                      );
                     },
                   ),
                 ],
@@ -147,10 +124,7 @@ class _TaskViewState extends ConsumerState<TaskView> {
               ),
             ),
             builder: ((context) {
-              return AddTodoSubtaskModal(
-                todoTaskId: widget.todoTaskId,
-                onSubtaskAdded: _loadTodoSubtasks,
-              );
+              return AddTodoSubtaskModal(todoTaskId: widget.todoTaskId);
             }),
           );
         },

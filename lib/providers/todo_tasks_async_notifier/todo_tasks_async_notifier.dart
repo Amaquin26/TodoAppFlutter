@@ -21,7 +21,7 @@ class TodoTasksNotifier extends AsyncNotifier<List<TodoTaskModel>> {
       description: description,
     );
     await refreshTodoTasks();
-    return id; // return to caller
+    return id;
   }
 
   Future<void> updateTodoTask({

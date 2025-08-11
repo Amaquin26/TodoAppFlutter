@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
 import 'package:todo_app_flutter/widgets/card/base_card_widget.dart';
 import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/bottom_modal/bottom_modal.dart';
 
-class SubtaskCardWidget extends StatefulWidget {
+class SubtaskCardWidget extends ConsumerStatefulWidget {
   final int id;
   final int todoTaskId;
   final String name;
   final bool isChecked;
-  final VoidCallback loadTodoSubtasks;
 
   const SubtaskCardWidget({
     super.key,
@@ -17,16 +17,13 @@ class SubtaskCardWidget extends StatefulWidget {
     required this.todoTaskId,
     required this.name,
     required this.isChecked,
-    required this.loadTodoSubtasks,
   });
 
   @override
-  State<SubtaskCardWidget> createState() => _SubtaskCardWidgetState();
+  ConsumerState<SubtaskCardWidget> createState() => _SubtaskCardWidgetState();
 }
 
-class _SubtaskCardWidgetState extends State<SubtaskCardWidget> {
-  final TodoSubtaskService _todoSubtaskService = TodoSubtaskService();
-
+class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
   late String _name;
   late bool _isChecked;
 
@@ -38,10 +35,10 @@ class _SubtaskCardWidgetState extends State<SubtaskCardWidget> {
   }
 
   Future<void> _toggleCheckStatus(bool? value) async {
+    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+
     try {
-      final newStatus = await _todoSubtaskService.toggleTodoSubtaskCheckStatus(
-        widget.id,
-      );
+      final newStatus = await notifier.toggleTodoSubtaskCheckStatus(widget.id);
       setState(() {
         _isChecked = newStatus;
       });
@@ -49,11 +46,26 @@ class _SubtaskCardWidgetState extends State<SubtaskCardWidget> {
   }
 
   Future<void> _updateTodoSubtask(String name) async {
+    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+
     try {
-      await _todoSubtaskService.updateTodoSubtask(id: widget.id, name: name);
+      await notifier.updateTodoSubtask(
+        id: widget.id,
+        todoTaskId: widget.todoTaskId,
+        name: name,
+      );
 
       debugPrint(name);
     } catch (e) {}
+  }
+
+  Future<void> _deleteTodoSubtask() async {
+    final notifier = ref.read(todoSubtasksProvider(widget.todoTaskId).notifier);
+
+    await notifier.deleteTodoSubtask(
+      id: widget.id,
+      todoTaskId: widget.todoTaskId,
+    );
   }
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
@@ -65,11 +77,12 @@ class _SubtaskCardWidgetState extends State<SubtaskCardWidget> {
           content: 'Are you sure you want to delete this subtask?',
           onPressedCancel: () => Navigator.of(context).pop(false),
           onPressedDelete: () async => {
-            await _todoSubtaskService.deleteTodoSubtask(widget.id),
+            await _deleteTodoSubtask(),
 
-            if (mounted) {Navigator.pop(context)},
-
-            widget.loadTodoSubtasks(),
+            if (context.mounted)
+              {
+                {Navigator.of(context).pop(false)},
+              },
           },
         );
       },
