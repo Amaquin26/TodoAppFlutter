@@ -3,7 +3,7 @@ import 'package:todo_app_flutter/models/todotask_model.dart';
 import '../../config/config.dart';
 
 class TodoTaskService extends BaseApiService {
-  TodoTaskService() : super('$baseApiUrl/TodoTask');
+  TodoTaskService() : super('$localhostBaseApiUrl/TodoTask');
 
   Future<List<TodoTaskModel>> getTodoTasks() async {
     final response = await get('');
