@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/main.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_task_async_notifier/todo_task_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
@@ -32,17 +32,11 @@ class _TaskViewState extends ConsumerState<TaskView> {
         return DeleteDialog(
           title: 'Delete Todo Task',
           content: 'Are you sure you want to delete this task?',
-          onPressedCancel: () => Navigator.of(context).pop(false),
+          onPressedCancel: () => context.pop(),
           onPressedDelete: () async => {
             await _deleteTodoTask(),
 
-            if (context.mounted)
-              {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const MyHomePage()),
-                  (Route<dynamic> route) => false,
-                ),
-              },
+            if (context.mounted) {context.go('/')},
           },
         );
       },

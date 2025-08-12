@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
+import 'package:go_router/go_router.dart';
 
 class AddTodoTaskModal extends ConsumerStatefulWidget {
   const AddTodoTaskModal({super.key});
@@ -68,7 +69,7 @@ class _AddTodoTaskModalState extends ConsumerState<AddTodoTaskModal> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -94,14 +95,8 @@ class _AddTodoTaskModalState extends ConsumerState<AddTodoTaskModal> {
                   _descriptionController.clear();
 
                   if (context.mounted) {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            TaskView(todoTaskId: newTodoTaskId),
-                      ),
-                    );
+                    context.pop();
+                    context.push('/task/$newTodoTaskId');
                   }
                 },
                 child: const Padding(

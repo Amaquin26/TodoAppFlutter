@@ -4,6 +4,7 @@ import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_sub
 import 'package:todo_app_flutter/widgets/card/base_card_widget.dart';
 import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/bottom_modal/bottom_modal.dart';
+import 'package:go_router/go_router.dart';
 
 class SubtaskCardWidget extends ConsumerStatefulWidget {
   final int id;
@@ -83,14 +84,11 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
         return DeleteDialog(
           title: 'Delete Todo Subtask',
           content: 'Are you sure you want to delete this subtask?',
-          onPressedCancel: () => Navigator.of(context).pop(false),
+          onPressedCancel: () => context.pop(),
           onPressedDelete: () async => {
             await _deleteTodoSubtask(),
 
-            if (context.mounted)
-              {
-                {Navigator.of(context).pop(false)},
-              },
+            if (context.mounted) context.pop(),
           },
         );
       },
@@ -160,7 +158,7 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
                                 _name = textValue;
                               }),
 
-                              if (context.mounted) {Navigator.pop(context)},
+                              if (context.mounted) {context.pop()},
                             },
                             initTextValue: _name,
                           );

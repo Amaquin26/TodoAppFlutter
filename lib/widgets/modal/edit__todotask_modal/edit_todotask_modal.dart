@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app_flutter/providers/todo_task_async_notifier/todo_task_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
+import 'package:go_router/go_router.dart';
 
 class EditTodotaskModal extends ConsumerStatefulWidget {
   final int todoTaskId;
@@ -90,7 +91,7 @@ class _EditTodotaskModalState extends ConsumerState<EditTodotaskModal> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -112,7 +113,7 @@ class _EditTodotaskModalState extends ConsumerState<EditTodotaskModal> {
                   await _updateTodoTask();
 
                   if (context.mounted) {
-                    Navigator.pop(context);
+                    context.pop();
                   }
                 },
                 child: const Padding(

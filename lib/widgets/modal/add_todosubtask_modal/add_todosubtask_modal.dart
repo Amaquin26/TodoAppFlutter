@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
+import 'package:go_router/go_router.dart';
 
 class AddTodoSubtaskModal extends ConsumerStatefulWidget {
   final int todoTaskId;
@@ -62,7 +63,7 @@ class _AddTodoSubtaskModalState extends ConsumerState<AddTodoSubtaskModal> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -87,7 +88,7 @@ class _AddTodoSubtaskModalState extends ConsumerState<AddTodoSubtaskModal> {
                   _nameController.clear();
 
                   if (context.mounted) {
-                    Navigator.pop(context);
+                    context.pop();
                   }
                 },
                 child: const Padding(

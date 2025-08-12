@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app_flutter/main.dart';
 import 'package:todo_app_flutter/models/todotask_model.dart';
-import 'package:todo_app_flutter/views/task/task_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todo_app_flutter/widgets/card/task_card/task_card_widget.dart';
 
 class TasksListWidget extends StatefulWidget {
@@ -20,11 +21,9 @@ class _TasksListWidgetState extends State<TasksListWidget> {
         ...widget.todoTasks.map(
           (task) => GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TaskView(todoTaskId: task.id),
-                ),
+              rootNavigatorKey.currentContext!.pushNamed(
+                'task',
+                pathParameters: {'id': task.id.toString()},
               );
             },
             child: TaskCardWidget(

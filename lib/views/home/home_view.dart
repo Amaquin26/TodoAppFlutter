@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_flutter/main.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/home/widgets/tasks_list_widget.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todotask_modal/add_todotask_modal.dart';
@@ -52,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-            context: context,
+            context: rootNavigatorKey.currentContext!,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20),

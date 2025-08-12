@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ChevronAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -18,7 +19,7 @@ class ChevronAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title, style: TextStyle(fontSize: 16.0)),
       leading: IconButton(
         icon: const Icon(Icons.chevron_left),
-        onPressed: onPress ?? () => Navigator.of(context).pop(),
+        onPressed: onPress ?? () => context.pop(),
       ),
       centerTitle: true,
       actions: [...actions ?? []],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomModal extends StatefulWidget {
   final String title;
@@ -60,7 +61,7 @@ class _BottomModalState extends State<BottomModal> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),

@@ -1,46 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/views/completed/completed_view.dart';
-import 'package:todo_app_flutter/views/home/home_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:todo_app_flutter/routes/routes.dart';
 import 'package:todo_app_flutter/widgets/navigation/bottom_navigation/bottom_navigation_widget.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:todo_app_flutter/widgets/templates/container/view_container/view_container.dart';
 
 void main() {
+  setUrlStrategy(PathUrlStrategy());
   runApp(ProviderScope(child: MyApp()));
 }
+
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
+final _router = GoRouter(
+  navigatorKey: rootNavigatorKey,
+  initialLocation: '/',
+  routes: appRoutes,
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Todo App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const MyHomePage(),
+      routerConfig: _router,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyHomePage extends StatelessWidget {
+  const MyHomePage(this.navigationShell, {super.key});
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  final StatefulNavigationShell navigationShell;
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0;
-
-  final List<Widget> _pages = [HomeView(), CompletedView()];
-
-  void onTabSelected(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+  void _onTap(index) {
+    debugPrint('Selected index: $index');
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
   }
 
   @override
@@ -57,10 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         centerTitle: true,
       ),
-      body: ViewContainer(child: _pages[_currentIndex]),
+      body: ViewContainer(child: navigationShell),
       bottomNavigationBar: BottomNavigationWidget(
-        currentIndex: _currentIndex,
-        onTabSelected: onTabSelected,
+        currentIndex: navigationShell.currentIndex,
+        onTabSelected: _onTap,
       ),
     );
   }
