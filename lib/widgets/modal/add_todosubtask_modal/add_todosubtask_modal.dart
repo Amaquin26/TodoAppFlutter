@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/api_service/todo_subtask/todo_subtask_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
-class AddTodoSubtaskModal extends StatefulWidget {
+class AddTodoSubtaskModal extends ConsumerStatefulWidget {
   final int todoTaskId;
-  final Function onSubtaskAdded;
 
-  const AddTodoSubtaskModal({
-    super.key,
-    required this.todoTaskId,
-    required this.onSubtaskAdded,
-  });
+  const AddTodoSubtaskModal({super.key, required this.todoTaskId});
 
   @override
-  State<AddTodoSubtaskModal> createState() => _AddTodoSubtaskModalState();
+  ConsumerState<AddTodoSubtaskModal> createState() =>
+      _AddTodoSubtaskModalState();
 }
 
-class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
-  final TodoSubtaskService _todoTaskService = TodoSubtaskService();
-
+class _AddTodoSubtaskModalState extends ConsumerState<AddTodoSubtaskModal> {
   final TextEditingController _nameController = TextEditingController();
 
   Future<int> _addTodoSubtask() async {
-    final newTodoTaskId = await _todoTaskService.addTodoSubtask(
+    final todoSubtasksNotifier = ref.read(
+      todoSubtasksProvider(widget.todoTaskId).notifier,
+    );
+
+    final newTodoTaskId = await todoSubtasksNotifier.addTodoSubtask(
       todoTaskId: widget.todoTaskId,
       name: _nameController.text,
     );
-
-    // Clear the text fields
-    _nameController.clear();
 
     return newTodoTaskId;
   }
@@ -86,10 +82,13 @@ class _AddTodoSubtaskModalState extends State<AddTodoSubtaskModal> {
                 ),
                 onPressed: () async {
                   await _addTodoSubtask();
-                  if (mounted) {
+
+                  // Clear the text fields
+                  _nameController.clear();
+
+                  if (context.mounted) {
                     Navigator.pop(context);
                   }
-                  widget.onSubtaskAdded();
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),

@@ -3,7 +3,7 @@ import 'package:todo_app_flutter/models/todosubtask_model.dart';
 import '../../config/config.dart';
 
 class TodoSubtaskService extends BaseApiService {
-  TodoSubtaskService() : super('$baseApiUrl/TodoSubtask');
+  TodoSubtaskService() : super('$localhostBaseApiUrl/TodoSubtask');
 
   Future<List<TodoSubtaskModel>> getTodoSubtasksByTaskId(int todoTaskId) async {
     final response = await get('/task/$todoTaskId');
@@ -31,8 +31,8 @@ class TodoSubtaskService extends BaseApiService {
     await delete('/$id');
   }
 
-  Future<bool> toggleTodoSubtaskCheckStatus(int todoTaskId) async {
-    final response = await patch('/$todoTaskId', null);
+  Future<bool> toggleTodoSubtaskCheckStatus(int todoSubtaskId) async {
+    final response = await patch('/$todoSubtaskId', null);
     return response as bool;
   }
 }

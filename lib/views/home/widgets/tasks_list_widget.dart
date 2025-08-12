@@ -5,13 +5,8 @@ import 'package:todo_app_flutter/widgets/card/task_card/task_card_widget.dart';
 
 class TasksListWidget extends StatefulWidget {
   final List<TodoTaskModel> todoTasks;
-  final VoidCallback loadTodTasks;
 
-  const TasksListWidget({
-    super.key,
-    required this.todoTasks,
-    required this.loadTodTasks,
-  });
+  const TasksListWidget({super.key, required this.todoTasks});
 
   @override
   State<TasksListWidget> createState() => _TasksListWidgetState();
@@ -28,10 +23,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TaskView(
-                    todoTaskId: task.id,
-                    loadTodTasks: widget.loadTodTasks,
-                  ),
+                  builder: (context) => TaskView(todoTaskId: task.id),
                 ),
               );
             },
