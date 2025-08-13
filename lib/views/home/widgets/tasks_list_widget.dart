@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:todo_app_flutter/models/todo_task/todo_task.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 import 'package:todo_app_flutter/widgets/card/task_card/task_card_widget.dart';
 
 class TasksListWidget extends StatefulWidget {
-  final List<TodoTaskModel> todoTasks;
+  final List<TodoTask> todoTasks;
 
   const TasksListWidget({super.key, required this.todoTasks});
 

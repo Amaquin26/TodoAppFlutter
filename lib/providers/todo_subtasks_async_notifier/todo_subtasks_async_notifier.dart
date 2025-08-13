@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/models/todosubtask_model.dart';
+import 'package:todo_app_flutter/models/todo_subtask/todo_subtask.dart';
 import 'package:todo_app_flutter/providers/todo_subtasks_provider/todo_subtasks_provider.dart';
 
-class TodoSubTasksNotifier
-    extends FamilyAsyncNotifier<List<TodoSubtaskModel>, int> {
+class TodoSubTasksNotifier extends FamilyAsyncNotifier<List<TodoSubtask>, int> {
   @override
-  FutureOr<List<TodoSubtaskModel>> build(int todoTaskId) async {
+  FutureOr<List<TodoSubtask>> build(int todoTaskId) async {
     final service = ref.read(todoSubtasksServiceProvider);
     return service.getTodoSubtasksByTaskId(todoTaskId);
   }
@@ -58,8 +57,6 @@ class TodoSubTasksNotifier
 }
 
 final todoSubtasksProvider =
-    AsyncNotifierProvider.family<
-      TodoSubTasksNotifier,
-      List<TodoSubtaskModel>,
-      int
-    >(TodoSubTasksNotifier.new);
+    AsyncNotifierProvider.family<TodoSubTasksNotifier, List<TodoSubtask>, int>(
+      TodoSubTasksNotifier.new,
+    );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_flutter/models/todosubtask_model.dart';
+import 'package:todo_app_flutter/models/todo_subtask/todo_subtask.dart';
 import 'package:todo_app_flutter/widgets/card/subtask_card/subtask_card_widget.dart';
 
 class SubtaskListWidget extends StatefulWidget {
-  final List<TodoSubtaskModel> todoSubtasks;
+  final List<TodoSubtask> todoSubtasks;
 
   const SubtaskListWidget({super.key, required this.todoSubtasks});
 
