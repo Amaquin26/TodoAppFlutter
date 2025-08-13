@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app_flutter/main.dart';
-import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
+import 'package:todo_app_flutter/providers/todo_subtasks_notifier/todo_subtasks_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_task_async_notifier/todo_task_async_notifier.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
 import 'package:todo_app_flutter/views/task/widgets/subtask_list_widget.dart';
@@ -75,7 +75,7 @@ class _TaskViewState extends ConsumerState<TaskView> {
                   Consumer(
                     builder: (context, builder, _) {
                       final todoTaskAsync = ref.watch(
-                        todoTaskProvider(widget.todoTaskId),
+                        todoTaskNotifierProvider(widget.todoTaskId),
                       );
 
                       return todoTaskAsync.when(
@@ -95,7 +95,7 @@ class _TaskViewState extends ConsumerState<TaskView> {
                   Consumer(
                     builder: (context, builder, _) {
                       final todoSubtasksAsync = ref.watch(
-                        todoSubtasksProvider(widget.todoTaskId),
+                        todoSubTasksNotifierProvider(widget.todoTaskId),
                       );
 
                       return todoSubtasksAsync.when(

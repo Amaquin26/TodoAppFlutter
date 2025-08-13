@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
+import 'package:todo_app_flutter/providers/todo_subtasks_notifier/todo_subtasks_notifier.dart';
 import 'package:todo_app_flutter/widgets/modal/base_bottom_sheet_modal.dart';
 
 class AddTodoSubtaskModal extends ConsumerStatefulWidget {
@@ -18,7 +18,7 @@ class _AddTodoSubtaskModalState extends ConsumerState<AddTodoSubtaskModal> {
 
   Future<int> _addTodoSubtask() async {
     final todoSubtasksNotifier = ref.read(
-      todoSubtasksProvider(widget.todoTaskId).notifier,
+      todoSubTasksNotifierProvider(widget.todoTaskId).notifier,
     );
 
     final newTodoTaskId = await todoSubtasksNotifier.addTodoSubtask(

@@ -1,10 +1,12 @@
 import 'dart:async';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:todo_app_flutter/models/todo_subtask/todo_subtask.dart';
 import 'package:todo_app_flutter/providers/todo_subtasks_provider/todo_subtasks_provider.dart';
 
-class TodoSubTasksNotifier extends FamilyAsyncNotifier<List<TodoSubtask>, int> {
+part 'todo_subtasks_notifier.g.dart';
+
+@riverpod
+class TodoSubTasksNotifier extends _$TodoSubTasksNotifier {
   @override
   FutureOr<List<TodoSubtask>> build(int todoTaskId) async {
     final service = ref.read(todoSubtasksServiceProvider);
@@ -17,7 +19,6 @@ class TodoSubTasksNotifier extends FamilyAsyncNotifier<List<TodoSubtask>, int> {
   }) async {
     final service = ref.read(todoSubtasksServiceProvider);
     final id = await service.addTodoSubtask(todoTaskId: todoTaskId, name: name);
-
     await refreshTodoSubtasks(todoTaskId);
     return id;
   }
@@ -43,7 +44,7 @@ class TodoSubTasksNotifier extends FamilyAsyncNotifier<List<TodoSubtask>, int> {
 
   Future<bool> toggleTodoSubtaskCheckStatus(int id) async {
     final service = ref.read(todoSubtasksServiceProvider);
-    final bool newCheckStatus = await service.toggleTodoSubtaskCheckStatus(id);
+    final newCheckStatus = await service.toggleTodoSubtaskCheckStatus(id);
     return newCheckStatus;
   }
 
@@ -55,8 +56,3 @@ class TodoSubTasksNotifier extends FamilyAsyncNotifier<List<TodoSubtask>, int> {
     });
   }
 }
-
-final todoSubtasksProvider =
-    AsyncNotifierProvider.family<TodoSubTasksNotifier, List<TodoSubtask>, int>(
-      TodoSubTasksNotifier.new,
-    );
