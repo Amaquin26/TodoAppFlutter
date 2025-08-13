@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:todo_app_flutter/models/todo_task/todo_task.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_provider/todo_tasks_provider.dart';
 
-class TodoTaskNotifier extends FamilyAsyncNotifier<TodoTaskModel, int> {
+class TodoTaskNotifier extends FamilyAsyncNotifier<TodoTask, int> {
   @override
-  Future<TodoTaskModel> build(int id) async {
+  Future<TodoTask> build(int id) async {
     final service = ref.read(todoTasksServiceProvider);
     return service.getTodoTask(id);
   }
@@ -33,6 +33,6 @@ class TodoTaskNotifier extends FamilyAsyncNotifier<TodoTaskModel, int> {
 }
 
 final todoTaskProvider =
-    AsyncNotifierProvider.family<TodoTaskNotifier, TodoTaskModel, int>(
+    AsyncNotifierProvider.family<TodoTaskNotifier, TodoTask, int>(
       TodoTaskNotifier.new,
     );

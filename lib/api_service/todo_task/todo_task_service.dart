@@ -1,20 +1,18 @@
 import 'package:todo_app_flutter/api_service/base_api_service.dart';
-import 'package:todo_app_flutter/models/todotask_model.dart';
+import 'package:todo_app_flutter/models/todo_task/todo_task.dart';
 import '../../config/config.dart';
 
 class TodoTaskService extends BaseApiService {
   TodoTaskService() : super('$localhostBaseApiUrl/TodoTask');
 
-  Future<List<TodoTaskModel>> getTodoTasks() async {
+  Future<List<TodoTask>> getTodoTasks() async {
     final response = await get('');
-    return (response as List)
-        .map((json) => TodoTaskModel.fromJson(json))
-        .toList();
+    return (response as List).map((json) => TodoTask.fromJson(json)).toList();
   }
 
-  Future<TodoTaskModel> getTodoTask(int id) async {
+  Future<TodoTask> getTodoTask(int id) async {
     final response = await get('/$id');
-    return TodoTaskModel.fromJson(response);
+    return TodoTask.fromJson(response);
   }
 
   Future<int> addTodoTask({required String title, String? description}) async {
