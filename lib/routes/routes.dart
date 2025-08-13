@@ -5,6 +5,15 @@ import 'package:todo_app_flutter/views/home/home_view.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 
 final List<RouteBase> appRoutes = [
+  GoRoute(
+    parentNavigatorKey: rootNavigatorKey,
+    name: 'task',
+    path: '/task/:id',
+    builder: (context, state) {
+      final id = int.parse(state.pathParameters['id']!);
+      return TaskView(todoTaskId: id);
+    },
+  ),
   StatefulShellRoute.indexedStack(
     builder: (context, state, navigationShell) {
       return MyHomePage(navigationShell);
@@ -29,14 +38,5 @@ final List<RouteBase> appRoutes = [
         ],
       ),
     ],
-  ),
-  GoRoute(
-    parentNavigatorKey: rootNavigatorKey,
-    name: 'task',
-    path: '/task/:id',
-    builder: (context, state) {
-      final id = int.parse(state.pathParameters['id']!);
-      return TaskView(todoTaskId: id);
-    },
   ),
 ];
