@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app_flutter/routes/keys/navigator_keys.dart';
 import 'package:todo_app_flutter/routes/routes.dart';
 import 'package:todo_app_flutter/widgets/navigation/bottom_navigation/bottom_navigation_widget.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -10,8 +11,6 @@ void main() {
   setUrlStrategy(PathUrlStrategy());
   runApp(ProviderScope(child: MyApp()));
 }
-
-final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final _router = GoRouter(
   navigatorKey: rootNavigatorKey,
@@ -41,7 +40,6 @@ class MyHomePage extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   void _onTap(index) {
-    debugPrint('Selected index: $index');
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,

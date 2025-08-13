@@ -1,42 +1,50 @@
 import 'package:go_router/go_router.dart';
 import 'package:todo_app_flutter/main.dart';
+import 'package:todo_app_flutter/routes/keys/navigator_keys.dart';
+import 'package:todo_app_flutter/util/page.dart';
 import 'package:todo_app_flutter/views/completed/completed_view.dart';
 import 'package:todo_app_flutter/views/home/home_view.dart';
 import 'package:todo_app_flutter/views/task/task_view.dart';
 
 final List<RouteBase> appRoutes = [
-  GoRoute(
-    parentNavigatorKey: rootNavigatorKey,
-    name: 'task',
-    path: '/task/:id',
-    builder: (context, state) {
-      final id = int.parse(state.pathParameters['id']!);
-      return TaskView(todoTaskId: id);
-    },
-  ),
   StatefulShellRoute.indexedStack(
-    builder: (context, state, navigationShell) {
-      return MyHomePage(navigationShell);
+    pageBuilder: (context, state, navigationShell) {
+      return getPage(child: MyHomePage(navigationShell), state: state);
     },
     branches: [
       StatefulShellBranch(
+        navigatorKey: homeTabNavigatorKey,
         routes: [
           GoRoute(
             path: '/',
             name: 'home',
-            builder: (context, state) => const HomeView(),
+            pageBuilder: (context, state) =>
+                getPage(child: const HomeView(), state: state),
           ),
         ],
       ),
       StatefulShellBranch(
+        navigatorKey: completedTabNavigatorKey,
         routes: [
           GoRoute(
             path: '/completed',
             name: 'completed',
-            builder: (context, state) => const CompletedView(),
+            pageBuilder: (context, state) =>
+                getPage(child: const CompletedView(), state: state),
           ),
         ],
       ),
     ],
+  ),
+  GoRoute(
+    name: 'task',
+    path: '/task/:id',
+    pageBuilder: (context, state) {
+      final id = int.parse(state.pathParameters['id']!);
+      return getPage(
+        child: TaskView(todoTaskId: id),
+        state: state,
+      );
+    },
   ),
 ];

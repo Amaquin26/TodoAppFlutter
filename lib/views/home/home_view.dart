@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/main.dart';
 import 'package:todo_app_flutter/providers/todo_tasks_async_notifier/todo_tasks_async_notifier.dart';
+import 'package:todo_app_flutter/routes/keys/navigator_keys.dart';
 import 'package:todo_app_flutter/views/home/widgets/tasks_list_widget.dart';
 import 'package:todo_app_flutter/widgets/modal/add_todotask_modal/add_todotask_modal.dart';
 
