@@ -42,7 +42,7 @@ class _EditTodotaskModalState extends ConsumerState<EditTodotaskModal> {
 
   Future<void> _updateTodoTask() async {
     final todoTaskNotifier = ref.read(
-      todoTaskProvider(widget.todoTaskId).notifier,
+      todoTaskNotifierProvider(widget.todoTaskId).notifier,
     );
     final todoTasksNotifier = ref.read(todoTasksProvider.notifier);
 

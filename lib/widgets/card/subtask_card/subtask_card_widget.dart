@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app_flutter/providers/todo_subtasks_async_notifier/todo_subtasks_async_notifier.dart';
+import 'package:todo_app_flutter/providers/todo_subtasks_notifier/todo_subtasks_notifier.dart';
 import 'package:todo_app_flutter/widgets/card/base_card_widget.dart';
 import 'package:todo_app_flutter/widgets/dialog/delete_dialog/delete_dialog.dart';
 import 'package:todo_app_flutter/widgets/modal/bottom_modal/bottom_modal.dart';
@@ -36,7 +36,7 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
 
   Future<void> _toggleCheckStatus(bool? value) async {
     final todoSubtasksNotifier = ref.read(
-      todoSubtasksProvider(widget.todoTaskId).notifier,
+      todoSubTasksNotifierProvider(widget.todoTaskId).notifier,
     );
 
     try {
@@ -51,7 +51,7 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
 
   Future<void> _updateTodoSubtask(String name) async {
     final todoSubtasksNotifier = ref.read(
-      todoSubtasksProvider(widget.todoTaskId).notifier,
+      todoSubTasksNotifierProvider(widget.todoTaskId).notifier,
     );
 
     try {
@@ -67,7 +67,7 @@ class _SubtaskCardWidgetState extends ConsumerState<SubtaskCardWidget> {
 
   Future<void> _deleteTodoSubtask() async {
     final todoSubtasksNotifier = ref.read(
-      todoSubtasksProvider(widget.todoTaskId).notifier,
+      todoSubTasksNotifierProvider(widget.todoTaskId).notifier,
     );
 
     await todoSubtasksNotifier.deleteTodoSubtask(
