@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_app_flutter/observers/logging_navigator_observer/logging_navigator_observer.dart';
 import 'package:todo_app_flutter/routes/keys/navigator_keys.dart';
 import 'package:todo_app_flutter/routes/routes.dart';
 import 'package:todo_app_flutter/widgets/navigation/bottom_navigation/bottom_navigation_widget.dart';
@@ -16,6 +17,7 @@ final _router = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/',
   routes: appRoutes,
+  observers: [LoggingNavigatorObserver()],
 );
 
 class MyApp extends StatelessWidget {

@@ -21,7 +21,7 @@ class _TasksListWidgetState extends State<TasksListWidget> {
         ...widget.todoTasks.map(
           (task) => GestureDetector(
             onTap: () {
-              context.pushNamed(
+              context.pushReplacementNamed(
                 'task',
                 pathParameters: {'id': task.id.toString()},
               );

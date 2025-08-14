@@ -19,7 +19,15 @@ class ChevronAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title, style: TextStyle(fontSize: 16.0)),
       leading: IconButton(
         icon: const Icon(Icons.chevron_left),
-        onPressed: onPress ?? () => context.pop(),
+        onPressed:
+            onPress ??
+            () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.goNamed('home');
+              }
+            },
       ),
       centerTitle: true,
       actions: [...actions ?? []],
